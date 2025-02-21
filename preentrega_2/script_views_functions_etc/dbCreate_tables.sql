@@ -31,9 +31,12 @@ CREATE TABLE consultation (
     doctor_id INT NOT NULL,
     date DATE NOT NULL,
     notes TEXT,
+    state VARCHAR(255) NOT NULL DEFAULT 'pendiente', -- Nueva columna de estado
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE,
     FOREIGN KEY (doctor_id) REFERENCES doctor(id) ON DELETE CASCADE
 );
+
+
 
 -- Tabla medicalhistory
 CREATE TABLE medicalhistory (
@@ -61,5 +64,12 @@ CREATE TABLE recipe (
     id INT AUTO_INCREMENT PRIMARY KEY,
     consultation_id INT NOT NULL,
     description TEXT NOT NULL,
+    FOREIGN KEY (consultation_id) REFERENCES consultation(id) ON DELETE CASCADE
+);
+CREATE TABLE consultation_audit (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    consultation_id INT NOT NULL,
+    previous_state VARCHAR(255) NOT NULL,
+	change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (consultation_id) REFERENCES consultation(id) ON DELETE CASCADE
 );

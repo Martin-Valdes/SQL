@@ -24,26 +24,15 @@ BEGIN
 END $$
 
 -- Procedimiento 2: Actualizar el estado de una consulta
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_consultation_status`(
+CREATE PROCEDURE update_consultation_status(
     IN consultation_id INT,
-    IN new_notes TEXT,
-    IN new_state VARCHAR(255)
+    IN new_notes TEXT
 )
 BEGIN
-    DECLARE old_state VARCHAR(255);
-
-    -- Obtener el estado anterior de la consulta
-    SELECT state INTO old_state
-    FROM consultation
-    WHERE id = consultation_id;
-
-    -- Actualizar las notas de la consulta y el estado
+    -- Actualizar las notas de la consulta
     UPDATE consultation
-    SET 
-        state = new_state,
-        notes = CONCAT('Status updated: ', new_notes, ' (', new_state, ') at ', NOW())
+    SET notes = CONCAT('Status updated: ', new_notes, ' at ', NOW())
     WHERE id = consultation_id;
-
 END $$
 
 -- Procedimiento 3: Obtener todas las consultas de un paciente

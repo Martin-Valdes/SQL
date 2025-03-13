@@ -21,24 +21,4 @@ BEGIN
     WHERE patient_id = OLD.id;
 END $$
 
--- Trigger 3: Registrar el estado anterior de una consulta en la tabla de auditoría
-CREATE TRIGGER audit_consultation_state
-BEFORE UPDATE ON consultation
-FOR EACH ROW
-BEGIN
-    -- Guardar el estado anterior solo si realmente cambia
-    IF OLD.state <> NEW.state THEN
-        -- Verificar si el estado ya ha sido registrado en la auditoría
-        IF NOT EXISTS (
-            SELECT 1
-            FROM consultation_audit
-            WHERE consultation_id = OLD.id AND previous_state = OLD.state
-        ) THEN
-            INSERT INTO consultation_audit (consultation_id, previous_state, change_date)
-            VALUES (OLD.id, OLD.state, NOW());
-        END IF;
-    END IF;
-END $$
-
 DELIMITER ;
-

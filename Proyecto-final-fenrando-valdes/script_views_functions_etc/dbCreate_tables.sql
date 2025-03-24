@@ -63,3 +63,13 @@ CREATE TABLE recipe (
     description TEXT NOT NULL,
     FOREIGN KEY (consultation_id) REFERENCES consultation(id) ON DELETE CASCADE
 );
+
+CREATE TABLE consultation_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT NOT NULL,
+    consultation_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE,
+    FOREIGN KEY (consultation_id) REFERENCES consultation(id) ON DELETE CASCADE
+);
+

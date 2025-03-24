@@ -1,15 +1,14 @@
 DELIMITER $$
 
 -- Trigger 1: Actualizar algo relacionado con la consulta, sin utilizar last_consultation_date
-CREATE TRIGGER update_last_consultation_date
+CREATE TRIGGER log_new_consultation
 AFTER INSERT ON consultation
 FOR EACH ROW
 BEGIN
-    -- Aquí puedes agregar otro comportamiento en lugar de actualizar last_consultation_date
-    -- Por ejemplo, podrías agregar alguna lógica relacionada con la consulta
-    -- Actualmente no estamos actualizando ninguna columna en patient
-    -- Puedes agregar otro comportamiento o simplemente dejarlo vacío si no es necesario
-END $$
+    INSERT INTO consultation_log (patient_id, consultation_id, created_at)
+    VALUES (NEW.patient_id, NEW.id, NOW());
+END;
+
 
 -- Trigger 2: Eliminar las consultas asociadas cuando se elimina un paciente
 CREATE TRIGGER delete_consultations_when_patient_deleted
